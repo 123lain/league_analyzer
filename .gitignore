@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Configs
+.env
+.env.*
+!*.example
+
+# IDE
+# VS Code settings
+.vscode/
+!.vscode/extensions.json
+
+# Pycharm settings
+.idea/
+
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
