@@ -20,7 +20,7 @@ class IngestionService:
         self.match_repository = MatchRepository(db)
         self.player_match_repository = PlayerMatchRepository(db)
 
-    async def ingest_player_matches(
+    async def ingest_player_matches( # not used yet
             self,
             puuid: str,
             count: int = 10
@@ -47,58 +47,55 @@ class IngestionService:
                 if not raw_match_data:
                     continue
 
-                info = raw_match_data['info']
-                match_obj = Match(
-                    match_id=m_id,
-                    match_created=datetime.fromtimestamp(info['gameCreation'] / 1000, tz=timezone.utc),
-                    match_duration_seconds=info['gameDuration'],
-                    queue_id=info['queueId'],
-                    patch=".".join(info.get('gameVersion').split('.')[:2]), # get the main patch and one digit after .
-                    raw_data=raw_match_data
-                )
-                self.match_repository.add_new_match(match_obj)
-
-                participant_puuids = {  # do this to queue all participants at once
-                    participant['puuid']
-                    for participant in info['participants']
-                }
-
-                existing_puuids = await self.player_repository.get_existing_puuids(participant_puuids)
-                new_players = [
-                    Player
-                ]
-                for participant in info['participants']:
-                    p_puuid = participant['puuid']
-
-                    if p_puuid not in existing_puuids:
-                        p_placeholder = Player(
-                            puuid=p_puuid,
-                            game_name=participant.get('riotIdGameName'),
-                            tag_line=participant.get('riotIdTagline'),
-                        )
-                        self.player_repository.add_player(p_placeholder)
-
-                    creep_score = participant.get('totalMinionsKilled', 0) + participant.get('jungleMinionsKilled', 0)
-
-                    player_match_stats = PlayerMatch(
-                        puuid=p_puuid,
+                async with self.db.begin():
+                    info = raw_match_data['info']
+                    match_obj = Match(
                         match_id=m_id,
-                        champion_id=participant.get('championId'),
-                        champion_name=participant.get('championName'),
-                        kills=participant.get('kills'),
-                        deaths=participant.get('deaths'),
-                        assists=participant.get('assists'),
-                        creep_score=creep_score,
-                        damage_dealt=participant.get('totalDamageDealtToChampions'),
-                        win=participant.get('win'),
-                        team_position=participant.get('teamPosition')
+                        match_created=datetime.fromtimestamp(info['gameCreation'] / 1000, tz=timezone.utc),
+                        match_duration_seconds=info['gameDuration'],
+                        queue_id=info['queueId'],
+                        patch=".".join(info.get('gameVersion').split('.')[:2]), # get the main patch and one digit after .
+                        raw_data=raw_match_data
                     )
-                    self.player_match_repository.add_player_match(player_match_stats)
+                    self.match_repository.add_new_match(match_obj)
 
-                await self.db.commit()
+                    participant_puuids = {  # do this to queue all participants at once
+                        participant['puuid']
+                        for participant in info['participants']
+                    }
+
+                    existing_puuids = await self.player_repository.get_existing_puuids(participant_puuids)
+
+                    for participant in info['participants']:
+                        p_puuid = participant['puuid']
+
+                        if p_puuid not in existing_puuids:
+                            p_placeholder = Player(
+                                puuid=p_puuid,
+                                game_name=participant.get('riotIdGameName'),
+                                tag_line=participant.get('riotIdTagline'),
+                            )
+                            self.player_repository.add_player(p_placeholder)
+
+                        creep_score = participant.get('totalMinionsKilled', 0) + participant.get('jungleMinionsKilled', 0)
+
+                        player_match_stats = PlayerMatch(
+                            puuid=p_puuid,
+                            match_id=m_id,
+                            champion_id=participant.get('championId'),
+                            champion_name=participant.get('championName'),
+                            kills=participant.get('kills'),
+                            deaths=participant.get('deaths'),
+                            assists=participant.get('assists'),
+                            creep_score=creep_score,
+                            damage_dealt=participant.get('totalDamageDealtToChampions'),
+                            win=participant.get('win'),
+                            team_position=participant.get('teamPosition')
+                        )
+                        self.player_match_repository.add_player_match(player_match_stats)
+
                 logger.info(f'Match {m_id} added to database')
             except Exception as e:
-                await self.db.rollback()
                 logger.error(f'Failed to pase match {m_id}: {e}')
                 continue
 
@@ -108,7 +105,7 @@ class IngestionService:
             self,
             game_name,
             tag_line
-    ) -> str | None:
+    ) -> Player | None:
         player_in_db = await self.player_repository.get_player_by_riot_id(game_name, tag_line)
 
         if player_in_db is None:
@@ -119,7 +116,9 @@ class IngestionService:
                     game_name=player['gameName'],
                     tag_line=player['tagLine']
                 )
-                await self.player_repository.add_player(player)
+                async with self.db.begin():
+                    await self.player_repository.add_player(player)
+
                 return player
             else:
                 return None

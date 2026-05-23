@@ -22,7 +22,6 @@ class MatchRepository:
             match: Match
     ) -> None:
          self.db.add(match)
-         await self.db.commit()
 
 class PlayerRepository:
     def __init__(self, db: AsyncSession):
@@ -49,7 +48,7 @@ class PlayerRepository:
             self,
             game_name: str,
             tag_line: str
-    ) -> str | None:
+    ) -> Player | None:
         result = await self.db.scalar(
             select(Player).where(
                 Player.game_name == game_name,
@@ -63,7 +62,6 @@ class PlayerRepository:
             player: Player
     ) -> None:
         self.db.add(player)
-        await self.db.commit()
 
 class PlayerMatchRepository:
     def __init__(self, db: AsyncSession):
@@ -74,4 +72,3 @@ class PlayerMatchRepository:
             player_match: PlayerMatch
     ) -> None:
         self.db.add(player_match)
-        await self.db.commit()
