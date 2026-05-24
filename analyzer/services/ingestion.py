@@ -15,6 +15,7 @@ class IngestionService:
             db: AsyncSession,
             riot_client: RiotAPIClient
     ):
+        self.db = db
         self.riot_client = riot_client
         self.player_repository = PlayerRepository(db)
         self.match_repository = MatchRepository(db)
