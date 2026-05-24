@@ -7,7 +7,7 @@ from analyzer.config import settings
 from analyzer.core.logger import setup_logger
 from analyzer.core.exceptions import RiotAPIError, ServiceConfigurationError
 from analyzer.core.rate_limiter import RiotRateLimiter
-from analyzer.schemas.riot import RiotPlayer, RankedEntry, RiotMatch
+from analyzer.schemas.riot import RiotPlayer, RankedEntry
 
 
 REGIONAL_HOST = 'https://europe.api.riotgames.com'  # account-v1, match-v5
@@ -213,7 +213,7 @@ class RiotAPIClient:
     async def get_match_details(
             self,
             match_id: str
-    ) -> RiotMatch | None:
+    ) -> dict | None:
         """
         Get full match details (regional host)\n
         Endpoint: /lol/match/v5/matches/{match_id}

@@ -29,11 +29,3 @@ class RiotPlayerMatch(RiotBaseModel):
     deaths: int
     assists: int
     win: bool
-
-
-class RiotMatch(RiotBaseModel):
-    match_id: str
-    match_creation: datetime
-    match_duration: int
-    queue_id: int
-    patch: str
