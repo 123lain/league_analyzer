@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
@@ -31,7 +32,7 @@ class Player(Base):
         default=func.now(),
         onupdate=func.now()
     )
-    ranked_data: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    ranked_data: Mapped[list[Any] | dict | None] = mapped_column(JSONB, nullable=True) # list if its empty
 
     matches: Mapped[list['PlayerMatch']] = relationship(back_populates='player')
 
