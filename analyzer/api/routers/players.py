@@ -27,6 +27,19 @@ async def get_player_matches(
 
 
 @router.get(
+    '/{puuid}/champion-stats',
+    response_model=list[ChampionStatsResponse]
+)
+async def get_player_champion_stats(
+        puuid: str,
+        limit: int = 5,
+        service=Depends(get_ingestion_service)
+):
+    stats = await service.get_player_champion_stats(puuid, limit)
+    return stats
+
+
+@router.get(
     '/{game_name}/{tag_line}',
     response_model=PlayerResponse
 )
@@ -62,16 +75,3 @@ async def sync_player_data(
         'status': 'OK',
         'detail': f'Added update task for player {game_name}#{tag_line}'
     }
-
-
-@router.get(
-    '/{puuid}/champion-stats',
-    response_model=list[ChampionStatsResponse]
-)
-async def get_player_champion_stats(
-        puuid: str,
-        limit: int = 5,
-        service=Depends(get_ingestion_service)
-):
-    stats = await service.get_player_champion_stats(puuid, limit)
-    return stats
