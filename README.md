@@ -1,4 +1,4 @@
-Feature-wise не закончил, на основном апи только один эндпоинт на поиск по Riot ID. Разделил работу между нашим апи и Riot API на несколько слоев: analyzer.api.main - analyzer.services.ingestion - analyzer.core.riot_lient. 
+Разделил работу между нашим апи и Riot API на несколько слоев: analyzer.api.main - analyzer.services.ingestion - analyzer.core.riot_lient. 
 Напрямую с бд работает analyzer.database.repository.
 Написал кастомный логгер analyzer.core.logger.
 Bucket реализовал в analyzer.core.rate_limiter, с адаптацией под headers лимиты от riot.
