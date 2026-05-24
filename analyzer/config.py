@@ -9,6 +9,8 @@ class Settings(BaseSettings):
 
     RIOT_API_KEY: str
 
+    MATCH_HISTORY_LIMIT: int = 20
+
     @property
     def DATABASE_URL_ASYNC(self) -> str:
         return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
