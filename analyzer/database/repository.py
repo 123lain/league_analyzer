@@ -74,7 +74,11 @@ class PlayerMatchRepository:
     ) -> None:
         self.db.add(player_match)
 
-    async def get_player_match_history(self, puuid: str, limit: int = 10):
+    async def get_player_match_history(
+            self,
+            puuid: str,
+            limit: int = 10
+    ):
         """
         JOIN Match and PlayerMatch to get needed data
         """
@@ -100,7 +104,11 @@ class PlayerMatchRepository:
         result = await self.db.execute(stmt)
         return result.mappings().all()
 
-    async def get_player_champion_stats(self, puuid: str, limit: int = 5):
+    async def get_player_champion_stats(
+            self, puuid:
+            str, limit:
+            int = 5
+    ):
         """
         Player's top champions, winrate and KDA
         """
