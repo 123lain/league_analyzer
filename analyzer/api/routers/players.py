@@ -71,6 +71,7 @@ async def sync_player_data(
         game_name=game_name,
         tag_line=tag_line
     )
+
     return {
         'status': 'OK',
         'detail': f'Added update task for player {game_name}#{tag_line}'

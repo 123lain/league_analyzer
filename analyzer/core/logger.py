@@ -21,7 +21,7 @@ def setup_logger():
         format=log_format,
         level="INFO",
         filter=sensitive_data_filter,
-        colorize=True  # Gives beautiful terminal colors automatically!
+        colorize=True
     )
 
     return logger
