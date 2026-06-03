@@ -2,7 +2,6 @@
 Напрямую с бд работает analyzer.database.repository.
 Написал кастомный логгер analyzer.core.logger.
 Bucket реализовал в analyzer.core.rate_limiter, с адаптацией под headers лимиты от riot.
-Если выбирать глубину истории матчей, то думаю 20? Как лимит токена 
 
 
 # Запуск
@@ -14,7 +13,6 @@ docker compose up
 
 alembic revision --autogenerate 
 alembic upgrade head
-из корня
 
 
 # Примеры запуска
