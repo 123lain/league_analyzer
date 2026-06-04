@@ -64,6 +64,9 @@ class RiotAPIClient:
             params: Dict[str, Any] | None = None,
             host: str = REGIONAL_HOST,
     ) -> Dict[str, Any] | None:
+        """
+        Base method for a request to the Riot API
+        """
         if not self.client:
             raise RuntimeError('Riot API client is not started')
 
