@@ -3,8 +3,8 @@ from datetime import timezone, datetime
 from fastapi import BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from analyzer.config import settings
-from analyzer.core.logger import setup_logger
+from analyzer.settings.config import settings
+from analyzer.settings.logger import setup_logger
 from analyzer.core.riot_client import RiotAPIClient
 from analyzer.database import Match, Player, PlayerMatch
 from analyzer.database.repository import PlayerRepository, MatchRepository, PlayerMatchRepository

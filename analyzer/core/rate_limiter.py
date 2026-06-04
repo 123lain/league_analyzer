@@ -1,7 +1,7 @@
 import asyncio
 import time
 
-from analyzer.core.logger import setup_logger
+from analyzer.settings.logger import setup_logger
 
 logger = setup_logger()
 

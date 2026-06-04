@@ -1,8 +1,7 @@
 import sys
 
 from loguru import logger
-
-from analyzer.config import settings
+from analyzer.settings.config import settings
 
 def setup_logger():
     logger.remove()

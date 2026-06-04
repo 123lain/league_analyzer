@@ -3,8 +3,8 @@ from typing import Any, Dict, List
 import httpx
 import asyncio
 
-from analyzer.config import settings
-from analyzer.core.logger import setup_logger
+from analyzer.settings.config import settings
+from analyzer.settings.logger import setup_logger
 from analyzer.core.exceptions import RiotAPIError, ServiceConfigurationError
 from analyzer.core.rate_limiter import RiotRateLimiter
 from analyzer.schemas.riot import RiotPlayer, RankedEntry

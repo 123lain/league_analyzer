@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from analyzer.core.logger import setup_logger
+from analyzer.settings.logger import setup_logger
 from analyzer.api.routers import players
 from analyzer.core.riot_client import RiotAPIClient
 
