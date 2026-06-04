@@ -125,7 +125,7 @@ class RiotAPIClient:
 
             if response.status_code == 404:
                 logger.info(f'Resource not found: {path}')
-                return None
+                return
 
 
             # riot-side errors

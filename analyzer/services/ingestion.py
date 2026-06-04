@@ -57,7 +57,7 @@ class IngestionService:
                 )
                 return player
             else:
-                return None
+                return
         else:
             logger.info(f'Player {player_in_db.puuid} already exists in database')
             player_in_db.ranked_data = await self.ensure_ranked_data(player_in_db)
